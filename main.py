@@ -2,8 +2,8 @@ import telebot
 import openai
 from datetime import datetime
 
-TELEGRAM_BOT_TOKEN = '5810666729:AAFC-3KWEWrOUUSsMr0ywCx36YeFw3NpQco'
-OPENAI_API_KEY = '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'
+TELEGRAM_BOT_TOKEN = ''
+OPENAI_API_KEY = ''
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 openai.api_key = OPENAI_API_KEY
@@ -13,13 +13,13 @@ openai.api_key = OPENAI_API_KEY
 # def handle_chat_id(message):
 #      user_chat_id = message.chat.id
 #      bot.send_message(user_chat_id, f'Я обновляюсь. Я напишу тебе, как полностью буду обновлен, хорошо? Code:  {user_chat_id}')
-#      target_chat_id = '657745373'  # Замените на фактический chat_id
+#      target_chat_id = ''  # Замените на фактический chat_id
 
 #      # Отправка сообщения другому пользователю
 #      bot.send_message(target_chat_id, f'Полученный chat_id: {user_chat_id}')
 
 # Дополнительные настройки
-LOG_FILE_PATH = 'chat_logs.txt'  # Укажите путь к файлу логов
+LOG_FILE_PATH = 'chat_logs.txt'  # Путь к файлу логов
 
 # Шаблонные ответы
 @bot.message_handler(commands=['start'])
@@ -28,17 +28,21 @@ def start_message(user):
 
 @bot.message_handler(func=lambda user: user.text.lower() in ['как меня зовут?', 'как мое имя?', 'кто я?'])
 def handle_name_request(user):
-    bot.send_message(user.chat.id, f'Твоё имя: {user.from_user.first_name} Заметь, я знаю это еще до того, как ты мне сообщила это. ахах')
-    bot.send_message(user.chat.id, f'Теперь задавай любые вопросы. Только прошу тебя, задавай их максимально точно и понятно.')
-    bot.send_message(user.chat.id, f'Мой создатель обучил меня так, что я смогу покорить все вершины! Ну вперёд {user.from_user.first_name}, я готов поговорить с тобой! \n Может тебе интересно, кто меня приудмал?')
+    bot_response = f'Твоё имя: {user.from_user.first_name} Заметь, я знаю это еще до того, как ты мне сообщила это. ахах'
+    bot.send_message(user.chat.id, bot_response)
+    log_chat(user.chat.id, user.text, bot_response)
 
 @bot.message_handler(func=lambda user: user.text.lower() in ['кто твой создатель?', 'кто тебя создал?', 'кто тебя придумал?', 'кто тебя разработал?', 'кто твой разработчик?'])
 def handle_who_developer(user):
-    bot.send_message(user.chat.id, 'Мой создатель Сандрик. Если оффициально, то Алекс Топчиян. О ВЕЛИКИЙ!')
+    bot_response = 'Мой создатель Сандрик. Если оффициально, то Алекс Топчиян. О ВЕЛИКИЙ!'
+    bot.send_message(user.chat.id, bot_response)
+    log_chat(user.chat.id, user.text, bot_response)
 
 @bot.message_handler(func=lambda user: user.text.lower() in ['здравствуй', 'здравствуйте', 'hi', 'здарова', 'привет'])
 def handle_greeting(user):
-    bot.send_message(user.chat.id, f'Приветствую! Я SandrikGPT робот, мой создатель - Сандрик, о Великий Сандрик, обожаю его! Что тебя интересует сейчас, уважаемый(ая)? \n Может быть спросишь "Как меня зовут?" А я угадаю.')
+    bot_response = f'Приветствую! Я SandrikGPT робот, мой создатель - Сандрик, о Великий Сандрик, обожаю его! Что тебя интересует сейчас, уважаемый(ая)? \n Может быть спросишь "Как меня зовут?" А я угадаю.'
+    bot.send_message(user.chat.id, bot_response)
+    log_chat(user.chat.id, user.text, bot_response)
 
 # ChatGPT Integration
 @bot.message_handler(func=lambda message: True)
